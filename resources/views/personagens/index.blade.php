@@ -10,35 +10,28 @@
                     @if (session('success'))
                         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">{{ session('success') }}</div>
                     @endif
-                    <div class="overflow-x-auto">
-                        <table class="w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-winder">Nome</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-winder">Raça</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-winder">Classe</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-winder">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800">
-                                @foreach ($personagens as $personagem)
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $personagem->nome }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $personagem->raça }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $personagem->classe }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <a href="{{ route('personagens.show', $personagem->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Detalhes</a>
-                                            <a href="{{ route('personagens.edit', $personagem->id) }}" class="text-yellow-600 hover:text-yellow-900 mr-3">Editar</a>
-                                            <form action="{{ route('personagens.destroy', $personagem->id) }}" method="POST" class="inline-block">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Tem certeza que deseja excluir este personagem?');">Excluir</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> {{-- Cards em grade responsiva --}}
+                        @forelse ($personagens as $personagem)
+                            <div class="bg-white dark:bg-gray-900 shadow-lg rounded-lg p-6 flex flex-col space-y-3 border">
+                                <div>
+                                    <h2 class="text-xl font-bold text-gray-700 dark:text-gray-200">{{ $personagem->nome }}</h2>
+                                    <p class="text-gray-500 dark:text-gray-300">Raça: <span class="font-semibold">{{ $personagem->raça }}</span></p>
+                                    <p class="text-gray-500 dark:text-gray-300">Classe: <span class="font-semibold">{{ $personagem->classe }}</span></p>
+                                </div>
+                                <div class="flex space-x-2 mt-4">
+                                    <a href="{{ route('personagens.show', $personagem->id) }}" class="bg-indigo-600 hover:bg-indigo-800 text-white px-3 py-1 rounded text-xs">Detalhes</a>
+                                    <a href="{{ route('personagens.edit', $personagem->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white px-3 py-1 rounded text-xs">Editar</a>
+                                    <form action="{{ route('personagens.destroy', $personagem->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded text-xs" onclick="return confirm('Tem certeza que deseja excluir este personagem?');">Excluir</button>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="col-span-full text-center text-gray-500 dark:text-gray-400">Nenhum personagem cadastrado ainda.</p>
+                        @endforelse
                     </div>
                 </div>
             </div>
